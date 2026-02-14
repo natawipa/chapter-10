@@ -103,6 +103,7 @@ async function main() {
 
     app.listen(PORT, () => {
         console.log("Microservice online.");
+        console.log("CD trigger: gateway updated.");
     });
 }
 
