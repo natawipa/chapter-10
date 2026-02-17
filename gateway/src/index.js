@@ -70,6 +70,18 @@ async function main() {
     });
 
     //
+    // Web page to show advertisements.
+    //
+    app.get("/advertise", async (req, res) => {
+
+        // Retrieves the advertisement data from the advertise microservice.
+        const adsResponse = await axios.get("http://advertise/advertisements");
+
+        // Renders the advertisements for display in the browser.
+        res.render("advertise", { advertisements: adsResponse.data.advertisements });
+    });
+
+    //
     // HTTP GET route that streams video to the user's browser.
     //
     app.get("/api/video", async (req, res) => {
@@ -99,6 +111,34 @@ async function main() {
             },
         });
         response.data.pipe(res);
+    });
+
+    //
+    // HTTP GET route to serve advertisement images from the advertise microservice.
+    //
+    app.get("/api/advertise/images/:filename", async (req, res) => {
+        const filename = req.params.filename;
+        const imagePath = `/images/${filename}`;
+        
+        console.log(`Proxying image request: ${imagePath}`);
+        
+        try {
+            const response = await axios({ // Forwards the request to the advertise microservice.
+                method: "GET",
+                url: `http://advertise${imagePath}`, 
+                responseType: "stream",
+            });
+            
+            // Set proper headers
+            if (response.headers['content-type']) {
+                res.set('Content-Type', response.headers['content-type']);
+            }
+            
+            response.data.pipe(res);
+        } catch (error) {
+            console.error(`Failed to fetch image ${imagePath}:`, error.message);
+            res.status(404).send('Image not found');
+        }
     });
 
     app.listen(PORT, () => {

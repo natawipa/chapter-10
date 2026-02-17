@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>FlixTube: Advertise</title>
+
+        <link rel="stylesheet" href="css/tailwind.min.css">
+        <link rel="stylesheet" href="css/app.css">
+    </head>
+    <body>
+        <div class="flex flex-col">
+            <div class="border-b-2 bg-gray-100">
+                <div class="nav flex flex-row items-center mt-1 p-2">
+                    <div class="text-xl font-bold">
+                        FlixTube
+                    </div>
+                    <div class="ml-16">
+                        <a href="/">Videos</a>
+                    </div>
+                    <div class="ml-4">
+                        <a href="/upload">Upload</a>
+                    </div>
+                    <div class="ml-4">
+                        <a href="/history">History</a>
+                    </div>
+                    <div class="ml-4 border-b-2 border-blue-600">
+                        <a href="/advertise">Advertise</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-4">
+                <h1>Featured Advertisements</h1>
+                <div class="m-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {{#each advertisements}}
+                            <div class="border-2 border-gray-200 rounded-lg p-4 text-center hover:shadow-lg transition-shadow">
+                                <div class="mb-4">
+                                    <img src="/api/advertise{{this.imageUrl}}" alt="{{this.name}}" class="w-24 h-24 mx-auto object-contain border border-gray-300 rounded" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                    <div class="w-24 h-24 mx-auto bg-gray-200 rounded flex items-center justify-center text-gray-500 text-sm" style="display:none;">{{this.name}} Logo</div>
+                                </div>
+                                <h3 class="text-lg font-semibold mb-2">{{this.name}}</h3>
+                                <p class="text-gray-600 mb-4 text-sm">{{this.description}}</p>
+                                <a href="{{this.websiteUrl}}" target="_blank" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                                    Visit {{this.name}}
+                                </a>
+                            </div>
+                        {{/each}}
+                    </div>
+                    {{#unless advertisements}}
+                        <div class="text-center text-gray-500">
+                            <p>No advertisements available at the moment.</p>
+                        </div>
+                    {{/unless}}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
